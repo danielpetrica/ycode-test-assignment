@@ -10,6 +10,7 @@
         "laravel/framework": "^10.0",
         "laravel/sanctum": "^3.2",
         "laravel/tinker": "^2.8",
+        "sammyjo20/saloon-cache-plugin": "^2.0",
         "sammyjo20/saloon-laravel": "^2.0"
     },
     "require-dev": {
