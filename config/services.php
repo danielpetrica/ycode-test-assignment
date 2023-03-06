@@ -31,4 +31,9 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'ycode' => [
+        'base_url' => env('YCODE_BASE_URL'),
+        'token' => env('YCODE_TOKEN')
+    ]
+
 ];
