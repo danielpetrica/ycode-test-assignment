@@ -9,7 +9,11 @@ use Saloon\CachePlugin\Contracts\Driver;
 use Saloon\CachePlugin\Traits\HasCaching;
 use Saloon\CachePlugin\Contracts\Cacheable;
 use Saloon\CachePlugin\Drivers\LaravelCacheDriver;
-
+/**
+ * List collections
+ *
+ * @link https://developers.ycode.com/reference/get_collections
+ */
 class ListCollections extends Request implements Cacheable
 {
     use HasCaching;
