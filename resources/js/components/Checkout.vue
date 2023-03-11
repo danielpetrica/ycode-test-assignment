@@ -5,12 +5,22 @@
         <form class="lg:grid lg:grid-cols-2 lg:gap-x-12 xl:gap-x-16">
             <div>
                 <div>
-                    <h2 class="text-lg font-medium text-gray-900">Contact information</h2>
+                    <h2 class="text-lg font-medium text-gray-900">
+                        Contact information
+                    </h2>
 
                     <div class="mt-4">
                         <label for="email-address" class="block text-sm font-medium text-gray-700">Email address</label>
                         <div class="mt-1">
-                            <input type="email" id="email-address" name="email-address" autocomplete="email" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                            <input
+                                type="email"
+                                id="email-address"
+                                name="email-address"
+                                autocomplete="email"
+                                v-model="email"
+                                required
+                                class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                            >
                         </div>
                     </div>
                 </div>
@@ -22,42 +32,85 @@
                         <div>
                             <label for="first-name" class="block text-sm font-medium text-gray-700">First name</label>
                             <div class="mt-1">
-                                <input type="text" id="first-name" name="first-name" autocomplete="given-name" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                                <input
+                                    type="text"
+                                    id="first-name"
+                                    name="first-name"
+                                    autocomplete="given-name"
+                                    class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                    v-model="firstname"
+                                >
                             </div>
                         </div>
 
                         <div>
                             <label for="last-name" class="block text-sm font-medium text-gray-700">Last name</label>
                             <div class="mt-1">
-                                <input type="text" id="last-name" name="last-name" autocomplete="family-name" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                                <input
+                                    type="text"
+                                    id="last-name"
+                                    name="last-name"
+                                    autocomplete="family-name"
+                                    class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                    v-model="lastname"
+                                >
                             </div>
                         </div>
 
                         <div class="sm:col-span-2">
                             <label for="address" class="block text-sm font-medium text-gray-700">Address</label>
                             <div class="mt-1">
-                                <input type="text" name="address" id="address" autocomplete="street-address" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                                <input
+                                    type="text"
+                                    name="address"
+                                    id="address"
+                                    autocomplete="street-address"
+                                    class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                    v-model="address"
+                                >
                             </div>
                         </div>
 
                         <div class="sm:col-span-2">
                             <label for="apartment" class="block text-sm font-medium text-gray-700">Apartment, suite, etc.</label>
                             <div class="mt-1">
-                                <input type="text" name="apartment" id="apartment" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                                <input
+                                    type="text"
+                                    name="apartment"
+                                    id="apartment"
+                                    class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                    v-model="apartment"
+                                >
                             </div>
                         </div>
 
                         <div>
                             <label for="city" class="block text-sm font-medium text-gray-700">City</label>
                             <div class="mt-1">
-                                <input type="text" name="city" id="city" autocomplete="address-level2" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                                <input
+                                    type="text"
+                                    name="city"
+                                    id="city"
+                                    autocomplete="address-level2"
+                                    class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                    v-model="city"
+                                >
                             </div>
                         </div>
 
                         <div>
                             <label for="country" class="block text-sm font-medium text-gray-700">Country</label>
                             <div class="mt-1">
-                                <select id="country" name="country" autocomplete="country-name" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                                <select
+                                    id="country"
+                                    name="country"
+                                    autocomplete="country-name"
+                                    class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                    v-model="country"
+                                >
+                                    <option :value="country.name.official" v-for="country in countryOptions">
+
+                                    </option>
                                 </select>
                             </div>
                         </div>
@@ -65,21 +118,42 @@
                         <div>
                             <label for="region" class="block text-sm font-medium text-gray-700">State / Province</label>
                             <div class="mt-1">
-                                <input type="text" name="region" id="region" autocomplete="address-level1" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                                <input
+                                    type="text"
+                                    name="region"
+                                    id="region"
+                                    autocomplete="address-level1"
+                                    class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                    v-model="state"
+                                >
                             </div>
                         </div>
 
                         <div>
                             <label for="postal-code" class="block text-sm font-medium text-gray-700">Postal code</label>
                             <div class="mt-1">
-                                <input type="text" name="postal-code" id="postal-code" autocomplete="postal-code" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                                <input
+                                    type="text"
+                                    name="postal-code"
+                                    id="postal-code"
+                                    autocomplete="postal-code"
+                                    class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                    v-model="postal"
+                                >
                             </div>
                         </div>
 
                         <div class="sm:col-span-2">
                             <label for="phone" class="block text-sm font-medium text-gray-700">Phone</label>
                             <div class="mt-1">
-                                <input type="text" name="phone" id="phone" autocomplete="tel" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                                <input
+                                    type="text"
+                                    name="phone"
+                                    id="phone"
+                                    autocomplete="tel"
+                                    class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                    v-model="phone"
+                                >
                             </div>
                         </div>
                     </div>
@@ -188,6 +262,34 @@
     </div>
 </template>
 
-<script>
-export default {}
+<script lang="js">
+import axios from "axios";
+
+export default {
+    name: 'Checkout',
+    data() {
+        return {
+            firstname: '',
+            lastname: '',
+            address: '',
+            email: '',
+            phone: '',
+            apartment: '',
+            city: '',
+            country: '',
+            state: '',
+            postal: '',
+            order: [],
+            countryOptions: []
+        }
+    },
+    methods: {
+        onSubmit() {
+            console.log(this)
+        }
+    },
+    async mounted() {
+        this.countryOptions = axios.get('/api/v1/countries').then((response) => response.data)
+    }
+}
 </script>
