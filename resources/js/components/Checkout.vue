@@ -8,7 +8,6 @@
                     <h2 class="text-lg font-medium text-gray-900">
                         Contact information
                     </h2>
-                    <input type="hidden" @crsf>
                     <div class="mt-4">
                         <label for="email-address" class="block text-sm font-medium text-gray-700">
                             Email address *
