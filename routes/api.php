@@ -20,8 +20,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::group(['prefix' => 'v1'], function () {
     Route::get('countries', 'App\Http\Controllers\Api\DataController@getCountries');
+    Route::get('products', 'App\Http\Controllers\Api\DataController@getProducts');
 
-    Route::group(['prefix'=> 'collections'], function(){
+    Route::group(['prefix'=> 'collections'], function() {
         Route::get(
             '/',
             'App\Http\Controllers\CollectionController@listCollections'
