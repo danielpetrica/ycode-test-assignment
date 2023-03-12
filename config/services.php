@@ -34,7 +34,9 @@ return [
     'ycode' => [
         'base_url' => env('YCODE_BASE_URL'),
         'token' => env('YCODE_TOKEN'),
-        'products_collection_id' => env('PRODUCTS_COLLECTION_ID')
+        'products_collection_id' => env('PRODUCTS_COLLECTION_ID'),
+        'orders_collection_id' => env('ORDERS_COLLECTION_ID'),
+        'orders_items_collection_id' => env('ORDERS_ITEMS_COLLECTION_ID'),
     ]
 
 ];

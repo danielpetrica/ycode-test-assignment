@@ -291,10 +291,10 @@ export default {
     },
     methods: {
         onSubmit() {
-            axios.post('/api/v1/order', {
+            axios.post('/order', {
                 email: this.email,
-                firstname: this.firstname,
-                lastname: this.lastname,
+                firstName: this.firstname,
+                lastName: this.lastname,
                 address: this.address,
                 apartment: this.apartment,
                 phone: this.phone,
@@ -302,8 +302,8 @@ export default {
                 country: this.country,
                 state: this.state,
                 order: this.order,
+                postal: this.postal,
             })
-            console.log(this.$data, event)
         },
         formatNumber: function (value) {
             let val = (value / 1).toFixed(2).replace(".", ",");
@@ -320,7 +320,8 @@ export default {
                         product => {
                             this.order[product.ID] = {'product': product, 'quantity': 0}
                         })
-                })
+                }
+            )
     },
     computed: {
         subtotal() {
@@ -329,7 +330,8 @@ export default {
                 this.order,
                 (order) => {
                     value += order.quantity * order.product.Price
-                })
+                }
+            )
 
             return value
         },
