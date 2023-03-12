@@ -4,6 +4,8 @@ namespace App\Http\Integrations\Ycode\Requests;
 
 use Saloon\Enums\Method;
 use Saloon\Http\Request;
+use Saloon\Contracts\Body\HasBody;
+use Saloon\Traits\Body\HasJsonBody;
 
 /**
  * Update collection item
@@ -11,12 +13,12 @@ use Saloon\Http\Request;
  * The fields to provide they are returned as the response of GetCollection
  * @link https://developers.ycode.com/reference/put_collections-collection-id-items-item-id
  */
-class UpdateCollectionItem extends Request
+class UpdateCollectionItem extends Request  implements HasBody
 {
+    use HasJsonBody;
     public function __construct (
         protected string $collection_id,
-        protected string $item_id,
-        protected array $body
+        protected string $item_id
     ) {}
 
     /**
