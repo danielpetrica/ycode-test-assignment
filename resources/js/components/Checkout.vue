@@ -8,7 +8,7 @@
                     <h2 class="text-lg font-medium text-gray-900">
                         Contact information
                     </h2>
-
+                    <input type="hidden" @crsf>
                     <div class="mt-4">
                         <label for="email-address" class="block text-sm font-medium text-gray-700">
                             Email address *
@@ -268,7 +268,7 @@
 
 <script lang="js">
 import axios from "axios";
-
+const _ = require('lodash');
 export default {
     name: 'Checkout',
     data() {
@@ -291,6 +291,18 @@ export default {
     },
     methods: {
         onSubmit() {
+            axios.post('/api/v1/order', {
+                email: this.email,
+                firstname: this.firstname,
+                lastname: this.lastname,
+                address: this.address,
+                apartment: this.apartment,
+                phone: this.phone,
+                city: this.city,
+                country: this.country,
+                state: this.state,
+                order: this.order,
+            })
             console.log(this.$data, event)
         },
         formatNumber: function (value) {
@@ -299,8 +311,8 @@ export default {
         }
     },
     async mounted() {
-        axios.get('/api/v1/countries').then((response) =>  this.countryOptions = response.data)
-        axios.get('/api/v1/products')
+        axios.get('/countries').then((response) =>  this.countryOptions = response.data)
+        axios.get('/products')
             .then((response) =>  this.productOptions = response.data)
             .then(
                 (data) => {

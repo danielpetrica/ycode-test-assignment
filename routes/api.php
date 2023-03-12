@@ -17,11 +17,11 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
-
+/**
+ * @deprecated t's not safe to let the presentation layer handle the data layer calls directly.
+ */
+/*
 Route::group(['prefix' => 'v1'], function () {
-    Route::get('countries', 'App\Http\Controllers\Api\DataController@getCountries');
-    Route::get('products', 'App\Http\Controllers\Api\DataController@getProducts');
-
     Route::group(['prefix'=> 'collections'], function() {
         Route::get(
             '/',
@@ -56,4 +56,4 @@ Route::group(['prefix' => 'v1'], function () {
             'App\Http\Controllers\CollectionController@removeCollectionItem'
         );
     });
-});
+});*/

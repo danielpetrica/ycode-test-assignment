@@ -1,11 +1,10 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Http\Integrations\Ycode\ApiClient;
 use App\Http\Integrations\Data\Requests\GetCountries;
-use App\Http\Integrations\Ycode\Requests\GetCollection;
 use App\Http\Integrations\Ycode\Requests\ListCollectionItems;
 
 /**
@@ -39,4 +38,5 @@ class DataController extends \App\Http\Controllers\Controller
 
         return response()->json($data, 200);
     }
+
 }
