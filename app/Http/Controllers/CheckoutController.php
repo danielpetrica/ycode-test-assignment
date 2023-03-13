@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Http\Integrations\Ycode\ApiClient;
+use Saloon\Exceptions\PendingRequestException;
+use Saloon\Exceptions\InvalidResponseClassException;
 use App\Http\Integrations\Ycode\Requests\ListCollectionItems;
 use App\Http\Integrations\Ycode\Requests\CreateCollectionItem;
 
@@ -52,27 +55,46 @@ class CheckoutController extends Controller
                       'Address line 2' => $data['apartment'],
                       'City' => $data['city'],
                       'State' => $data['state'],
+                      'Country' => $data['country'],
                       'Zip' => $data['postal'],
                       'Total' => $subTotal + $shipping,
                       'Subtotal' => $subTotal,
                       'Shipping' => $shipping,
                   ]);
-        $orderObject = $connector->send($request)->json();
-        // create the order - product pivot table items
-
-        foreach ($data['order'] as $product) {
-            $request = new CreateCollectionItem(
-                config('services.ycode.orders_items_collection_id')
-            );
-            $request
-                ->body()
-                ->set([
-                          'Order' => $orderObject['_ycode_id'],
-                          'Product' => $product['product']['_ycode_id'],
-                          'Quantity' => (int) $product['quantity'],
-                      ]);
-            $pivot = $connector->send($request);
+        try
+        {
+            $order = $connector->send($request);
         }
-        return response()->json(['status' => 'success'], $pivot->status());
+        catch (\Exception $e) {
+            return response()->json("Error while placing the order", 500);
+        }
+        $orderObject = $order->json();
+
+        // the order has not been placed
+        if (!$order->successful()) {
+            return response()->json("Order has not been created", $order->status());
+        }
+
+        // create the order - product pivot table items
+        try
+        {
+            foreach ($data['order'] as $product) {
+                $request = new CreateCollectionItem(
+                    config('services.ycode.orders_items_collection_id')
+                );
+                $request
+                    ->body()
+                    ->set([
+                              'Order' => $orderObject['_ycode_id'],
+                              'Product' => $product['product']['_ycode_id'],
+                              'Quantity' => (int) $product['quantity'],
+                          ]);
+                $pivot = $connector->send($request);
+            }
+        } catch (Exception $exception) {
+            return response()->json("Couldn't place the order correctly", 500);
+        }
+
+        return response()->json($orderObject, $order->status());
     }
 }

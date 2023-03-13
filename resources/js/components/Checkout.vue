@@ -2,7 +2,11 @@
     <div>
         <h2 class="sr-only">Checkout</h2>
 
-        <form class="lg:grid lg:grid-cols-2 lg:gap-x-12 xl:gap-x-16" @submit.prevent="onSubmit">
+        <form
+            class="lg:grid lg:grid-cols-2 lg:gap-x-12 xl:gap-x-16"
+            @submit.prevent="onSubmit"
+            v-if="!orderSent"
+        >
             <div>
                 <div>
                     <h2 class="text-lg font-medium text-gray-900">
@@ -17,6 +21,7 @@
                                 type="email"
                                 id="email-address"
                                 name="email-address"
+                                :disabled="loading"
                                 autocomplete="email"
                                 v-model="email"
                                 required
@@ -40,6 +45,7 @@
                                     id="first-name"
                                     name="first-name"
                                     required
+                                    :disabled="loading"
                                     autocomplete="given-name"
                                     class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                                     v-model="firstname"
@@ -56,6 +62,7 @@
                                     name="last-name"
                                     autocomplete="family-name"
                                     required
+                                    :disabled="loading"
                                     class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                                     v-model="lastname"
                                 >
@@ -70,6 +77,7 @@
                                     name="address"
                                     id="address"
                                     required
+                                    :disabled="loading"
                                     autocomplete="street-address"
                                     class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                                     v-model="address"
@@ -84,7 +92,7 @@
                                     type="text"
                                     name="apartment"
                                     id="apartment"
-                                    class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                    :disabled="loading"                                    class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                                     v-model="apartment"
                                 >
                             </div>
@@ -98,6 +106,7 @@
                                     name="city"
                                     id="city"
                                     required
+                                    :disabled="loading"
                                     autocomplete="address-level2"
                                     class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                                     v-model="city"
@@ -112,7 +121,7 @@
                                     id="country"
                                     name="country"
                                     required
-                                    :disabled="countryOptions === []"
+                                    :disabled="countryOptions === [] || loading"
                                     autocomplete="country-name"
                                     class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                                     v-model="country"
@@ -133,6 +142,7 @@
                                     name="region"
                                     id="region"
                                     required
+                                    :disabled="loading"
                                     autocomplete="address-level1"
                                     class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                                     v-model="state"
@@ -166,6 +176,7 @@
                                     id="phone"
                                     autocomplete="tel"
                                     required
+                                    :disabled="loading"
                                     class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                                     v-model="phone"
                                 >
@@ -256,12 +267,29 @@
                         <button
                             type="submit"
                             @submit="onSubmit"
+                            :disabled="loading"
                             class="w-full rounded-md border border-transparent bg-indigo-600 py-3 px-4 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50"
                         >Submit order</button>
                     </div>
                 </div>
             </div>
         </form>
+        <div v-if="orderSent">
+            <p v-if="!orderStatus">
+                {{ orderResponse}}
+            </p>
+            <p v-if="orderStatus">
+                Order with id {{ orderResponse.ID }} for ${{orderResponse.Total}} has been received.
+            </p>
+            <p class="py-4">
+                <button
+                    @click.prevent="reloadPage"
+                    class="w-full rounded-md border border-transparent bg-indigo-500 py-3 px-4 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50"
+                >
+                    Click here to place a new order
+                </button>
+            </p>
+        </div>
     </div>
 </template>
 
@@ -285,24 +313,41 @@ export default {
             order: {},
             countryOptions: [],
             productOptions: [],
-            shipping: 5
+            shipping: 5,
+            orderStatus: false,
+            orderSent: false,
+            orderResponse: '',
+            loading: false,
         }
     },
     methods: {
         onSubmit() {
-            axios.post('/order', {
-                email: this.email,
-                firstName: this.firstname,
-                lastName: this.lastname,
-                address: this.address,
-                apartment: this.apartment,
-                phone: this.phone,
-                city: this.city,
-                country: this.country,
-                state: this.state,
-                order: this.order,
-                postal: this.postal,
-            })
+            if (!this.loading) {
+                this.loading =true
+                axios.post('/order', {
+                    email: this.email,
+                    firstName: this.firstname,
+                    lastName: this.lastname,
+                    address: this.address,
+                    apartment: this.apartment,
+                    phone: this.phone,
+                    city: this.city,
+                    country: this.country,
+                    state: this.state,
+                    order: this.order,
+                    postal: this.postal,
+                })
+                    .then((response) => {
+                        this.orderSent = true
+                        this.orderStatus = (response.status === 200)
+                        this.orderResponse = response.data
+                        this.loading = false
+                    })
+            }
+
+        },
+        reloadPage () {
+            window.location.reload()
         },
         formatNumber: function (value) {
             let val = (value / 1).toFixed(2).replace(".", ",");
