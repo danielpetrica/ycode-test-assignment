@@ -22,7 +22,7 @@
         "vue-loader": "^17.0.1"
     },
     "dependencies": {
-        "vite": "^4.1.4",
+        "vite": "^4.1.5",
         "vuex": "^4.0.2"
     }
 }
